@@ -36,7 +36,10 @@ public class SecurityConfig {
         http
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/api/register","/images/**", "/api/login", "/api/foods/**", "/api/orders/all", "/api/orders/status/**").permitAll()
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/register", "/api/login", "/images/**", "/api/foods/**", "/api/orders/all", "/api/orders/status/**").permitAll()
+                        .requestMatchers("/", "/index.html", "/admin/**", "/assets/**", "/*.js", "/*.css", "/*.png", "/*.ico", "/*.svg").permitAll()
+                        .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
@@ -55,7 +58,7 @@ public class SecurityConfig {
 
     private UrlBasedCorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:5174"));
+        config.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:5174", "http://localhost:8080"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         config.setAllowCredentials(true);
