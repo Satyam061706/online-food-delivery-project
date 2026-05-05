@@ -26,6 +26,9 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public String findByUserId() {
+        if (autthenticationFacade.getAuthentication() == null) {
+            throw new RuntimeException("User not authenticated");
+        }
         String loggedInUserEmail = autthenticationFacade.getAuthentication().getName();
         UserEntity loggedInUser = userRepository.findByEmail(loggedInUserEmail).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         return loggedInUser.getId();

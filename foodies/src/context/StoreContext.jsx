@@ -37,7 +37,11 @@ export const StoreContextProvider = (props) => {
 
   const loadCartData = async (token) => {
     const items = await getCartData(token);
-    setQuantities(items);
+    if (items) {
+      setQuantities(items);
+    } else {
+      setQuantities({});
+    }
   };
 
   const contextValue = {
